@@ -2,7 +2,7 @@ function Get-S1Recipient {
 	<#
 	.NOTES
 		Author:			Chris Stone <chris.stone@nuwavepartners.com>
-		Date-Modified:	2022-08-24 14:19:45
+		Date-Modified:	2022-10-28 10:16:09
 
 	.SYNOPSIS
 		Get Recipients for Notifications
@@ -64,7 +64,7 @@ function Get-S1Recipient {
 		if ($Email)		{ $Parameters.Add("email", $Email) }
 		if ($Name)		{ $Parameters.Add("name", $name) }
 		if ($Query)		{ $Parameters.Add("query", $Query) }
-		if ($SiteID)	{ $Parameters.Add("SiteID", ($SiteID -join ",")) }
+		if ($SiteID)	{ $Parameters.Add("siteIds", ($SiteID -join ",")) }
 		if ($SMS)		{ $Parameters.Add("sms", $SMS) }
 		$Response = Invoke-S1Query -URI $URI -Method GET -Parameters $Parameters
 

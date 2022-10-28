@@ -6,7 +6,7 @@ Properties {
 		$ProjectRoot = Resolve-Path "$PSScriptRoot\.."
 	}
 
-	$Timestamp = Get-Date -f 's' -AsUTC
+	$Timestamp = ((Get-Date).ToUniversalTime() | Get-Date -f 's').Replace(':','-') + 'Z'
 
 	$Verbose = @{}
 	if($ENV:BHCommitMessage -match "!verbose")
@@ -28,6 +28,7 @@ Task Init {
 	Set-Location $ProjectRoot
 	"Build System Details:"
 	Get-Item ENV:BH*
+	Write-Output $Timestamp
 
 	# Testing links on github requires >= tls 1.2
 	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12

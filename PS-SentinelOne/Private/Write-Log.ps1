@@ -32,7 +32,7 @@ function Write-Log {
 
 		switch ($Level) {
 			"Informational" {
-				Write-Output $LogMessage
+				# Write-Output $LogMessage
 			}
 			"Verbose" {
 				Write-Verbose $LogMessage

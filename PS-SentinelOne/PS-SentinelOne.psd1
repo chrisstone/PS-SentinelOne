@@ -6,14 +6,14 @@
 
 @{
 	RootModule = 'PS-SentinelOne.psm1'
-	ModuleVersion = '0.2'
+	ModuleVersion = '2.1.3'
 	GUID = '77c92a6d-a1d2-4f37-aa01-10f2be735d0b'
 	Author = 'davidhowell.tx'
 	CompanyName = 'David Howell'
 	Copyright = '(c) 2020 davidhowell.tx. All rights reserved.'
 	Description = 'A PowerShell script module that provides command-line interaction and automation for the SentinelOne API.'
 
-	FunctionsToExport = @()
+	FunctionsToExport = '*'
 	CmdletsToExport = @()
 	VariablesToExport = '*'
 	AliasesToExport = @()
@@ -35,6 +35,8 @@
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ''
+
+			Prerelease = ''
 
 		} # End of PSData hashtable
 
