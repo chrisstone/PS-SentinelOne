@@ -6,7 +6,7 @@
 
 @{
 	RootModule = 'PS-SentinelOne.psm1'
-	ModuleVersion = '2.1.3'
+	ModuleVersion = '2.1.4'
 	GUID = '77c92a6d-a1d2-4f37-aa01-10f2be735d0b'
 	Author = 'davidhowell.tx'
 	CompanyName = 'David Howell'
