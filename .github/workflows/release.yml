@@ -1,0 +1,35 @@
+on:
+  push:
+    tags:
+      - 'v*'
+
+name: Create Release & Publish
+
+jobs:
+  Release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+
+  Publish:
+    name: PSAke Publish Task
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Install Dependencies from PSGallery
+        shell: pwsh
+        run: |
+            Set-PSRepository PSGallery -InstallationPolicy Trusted
+            Install-Module Psake
+            Install-Module BuildHelpers
+      - name: Invoke PSAke
+        shell: pwsh
+        env:
+          NuGetApiKey: ${{ secrets.PS_GALLERY_KEY }}
+          GITHUB_RUNNUMBER: ${{ github.run_number }}
+        run: Invoke-psake -taskList 'Publish'

@@ -1,0 +1,25 @@
+name: Build PowerShell Module on Windows
+on:
+  push:
+    branches: [main, devel]
+
+jobs:
+  build-psake:
+    name: PSAke Build Process
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install Dependencies from PSGallery
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module Psake
+      - name: Invoke PSAke
+        shell: pwsh
+        run: Invoke-psake -taskList 'Test'
+      - name: Upload Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-Unit-Tests
+          path: Unit.Tests.xml
