@@ -16,20 +16,15 @@ This is a PowerShell script module that provides command-line interaction and au
 Development is ongoing, with the goal to add support for the majority of the API set, and an attempt to provide examples for various capabilities.
 
 ----------
-## Installation and Removal
+## Installation
 
-Installation of this module currently consists of a pair of scripts that will copy the module to one of the PowerShell module paths, and check PowerShell module paths to remove it.
+Available via [PowerShell Gallery](https://www.powershellgallery.com/packages/PS-SentinelOne/), or download/clone this repository.
 
-**Install**
-```PowerShell
-.\Install-Module.ps1
+```powershell
+Install-Module -Name PS-SentinelOne
+# -- OR --
+Import-Module "C:\Path\To\Downloaded_Cloned\Repository\PS-SentinelOne.psd1"
 ```
-
-**Uninstall**
-```PowerShell
-.\Uninstall-Module.ps1
-```
-
 ----------
 ## Configuration
 
