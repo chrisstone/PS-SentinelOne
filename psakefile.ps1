@@ -1,6 +1,11 @@
 Properties {
+	# Find the build folder based on build system
+	# $ProjectRoot = $ENV:BHProjectPath
+	# If ($null -eq $ProjectRoot) {
 	$ProjectRoot = Resolve-Path $PSScriptRoot
 	$ModuleRoot = (Get-ChildItem -Recurse -Filter *.psm1 | Select-Object -First 1).DirectoryName
+
+	# }
 }
 
 TaskSetup {
@@ -48,7 +53,6 @@ Task Test -depends Init {
 
 Task Build -depends Test {
 	Write-Output "Updating Module Manifest:"
-	$ManifestData = Import-PowerShellDataFile -Path (Get-ChildItem -Path $ModuleRoot -Filter '*.psd1').FullName
 
 	# FunctionsToExport, AliasesToExport; from BuildHelpers
 	Write-Output "-Functions"
@@ -56,7 +60,18 @@ Task Build -depends Test {
 	Write-Output "-Aliases"
 	Set-ModuleAlias
 
-	# Version from Tag/CI
+	# Prerelease
+	If ($env:BHBranchName -match 'tags') {
+		Write-Output "-Release Metadata"
+		# Remove "Prerelease" from Manifest
+		Set-Content -Path $env:BHPSModuleManifest -Value (Get-Content -Path $env:BHPSModuleManifest | Select-String -Pattern 'Prerelease' -NotMatch)
+	} else {
+		Write-Output "-Prerelease Metadata"
+		# Update Prerelease Version
+		Update-Metadata -Path $env:BHPSModuleManifest -PropertyName Prerelease -Value "PRE$(($env:BHCommitHash).Substring(0,7))"
+	}
+
+	# Build Number from CI
 	$pattern = '(\d+(\.\d+)+)?$'
 	if ($env:BHBranchName -match $pattern) {
 		[Version] $Ver = $Matches[0]
@@ -70,22 +85,11 @@ Task Build -depends Test {
 	}
 	Update-Metadata -Path $env:BHPSModuleManifest -PropertyName 'ModuleVersion' -Value (@($Ver.Major, $Ver.Minor, $Build) -join '.')
 	Write-Output ("-Version {0}" -f $Ver.ToString())
-
-	# Prerelease
-	If ($env:BHBranchName -match 'tags') {
-		Write-Output "-Release Metadata"
-		# Remove "Prerelease" from Manifest
-		Set-Content -Path $env:BHPSModuleManifest -Value (Get-Content -Path $env:BHPSModuleManifest | Select-String -Pattern 'Prerelease' -NotMatch)
-	} else {
-		Write-Output "-Prerelease Metadata"
-		# Update Prerelease Version
-		Update-Metadata -Path $env:BHPSModuleManifest -PropertyName Prerelease -Value "PRE$(($env:BHCommitHash).Substring(0,7))"
-	}
 }
 
 Task Publish -depends Build {
 	$publishParams = @{
-		Path        = $ModuleRoot
+		Path        = $env:BHPSModulePath
 		NuGetApiKey = $env:NuGetApiKey
 	}
 
