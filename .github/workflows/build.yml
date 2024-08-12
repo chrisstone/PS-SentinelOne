@@ -9,7 +9,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Dependencies from PSGallery
         shell: pwsh
         run: |
@@ -19,7 +19,7 @@ jobs:
         shell: pwsh
         run: Invoke-psake -taskList 'Test'
       - name: Upload Results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-Unit-Tests
           path: Unit.Tests.xml

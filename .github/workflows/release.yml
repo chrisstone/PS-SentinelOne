@@ -33,3 +33,4 @@ jobs:
           NuGetApiKey: ${{ secrets.PS_GALLERY_KEY }}
           GITHUB_RUNNUMBER: ${{ github.run_number }}
         run: Invoke-psake -taskList 'Publish'
+
